@@ -8,11 +8,12 @@ export default [
     files: ["**/*.{js,mjs,cjs,ts}"],
     rules: {
       "@typescript-eslint/array-type": "error",
+      "@typescript-eslint/no-explicit-any": "always",
+      "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
       "semi": ["error", "always"],
       "indent": ["error", 2],
       "quotes": ["error"],
       "comma-dangle": ["error", "always-multiline"],
-      "no-unused-vars": ["error", { "args": "none" }],
       "space-before-function-paren": ["error", "always"],
     },
   },

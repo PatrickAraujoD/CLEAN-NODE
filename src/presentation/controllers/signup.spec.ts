@@ -1,6 +1,4 @@
-import { InvalidParamError } from "../errors/invalid-param-error";
-import { MissingParamError } from "../errors/missing-param-error";
-import { ServerError } from "../errors/server-error";
+import { MissingParamError, ServerError, InvalidParamError } from "../errors";
 import { EmailValidator } from "../protocols/email-validator";
 import { SignUpController} from "./signup";
 
@@ -125,7 +123,7 @@ describe("SignUp Controller", () => {
     }
     const emailValidatorStub = new EmailValidatorStub();
     const sut =  new SignUpController(emailValidatorStub);
-    
+
     const httpRequest = {
       body: {
         name: "any_name",

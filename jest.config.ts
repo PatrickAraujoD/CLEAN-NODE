@@ -5,6 +5,7 @@ const config: Config = {
   collectCoverageFrom: ["<rootDir/src/**/*.ts>"],
   collectCoverage: true,
   testEnvironment: "node",
+  preset: '@shelf/jest-mongodb',
   transform: {
     ".+\\.ts$": "ts-jest",
   },

@@ -57,4 +57,20 @@ describe("Account Mongo Reposiotry", () => {
     const account = await sut.loadByEmail('any_email@mail.com')
     expect(account).toBeFalsy()
   })
+
+  test("Should update the account accessToken on updateAccessToken success", async () => {
+    const sut = makeSut();
+    const res = await accountCollection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+    const accountId = res.insertedId
+    const fakeAccount = await accountCollection.findOne({ _id: accountId })
+    expect(fakeAccount.accessToken).toBeFalsy()
+    await sut.updateAcessToken(accountId.toString(), 'any_token')
+    const account = await accountCollection.findOne({ _id: accountId })
+    expect(account).toBeTruthy()
+    expect(account.accessToken).toBe('any_token')
+  })
 })

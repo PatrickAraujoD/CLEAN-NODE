@@ -27,7 +27,7 @@ export const forbidden = (error: Error): HttpResponse => ({
 });
 
 export const noContent = () => ({
-  statusCode: 200,
+  statusCode: 204,
   body: null
 });
 

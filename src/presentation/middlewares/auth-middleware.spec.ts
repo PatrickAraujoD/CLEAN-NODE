@@ -3,7 +3,13 @@ import { AccountModel } from "../../domain/models/account"
 import { AccessDeniedError } from "../errors"
 import { forbidden } from "../helpers/http/http-helper"
 import { AuthMiddleware } from "./auth-middleware"
+import { HttpRequest } from '../protocols';
 
+const makeFakeHttpRequest = (): HttpRequest => ({
+  headers: {
+    'x-access-token': 'any_token' 
+  }
+})
 const makeFakeAccount = (): AccountModel => ({
   id: "any_id",
   name: "any_name",
@@ -45,11 +51,7 @@ describe('Auth Middleware', () => {
   test('Should call LoadAccountByToken with correct accessToken', async () => {
     const { sut, loadAccountByTokenStub } = makeSut()
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
-    await sut.handle({
-      headers: {
-        'x-access-token': 'any_token' 
-      }
-    })
+    await sut.handle(makeFakeHttpRequest())
     expect(loadSpy).toHaveBeenCalledWith('any_token')
   })
 })

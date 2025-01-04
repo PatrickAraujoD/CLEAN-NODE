@@ -87,7 +87,7 @@ describe("Account Mongo Reposiotry", () => {
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
-        acessToken: 'any_token'
+        accessToken: 'any_token'
       })
       const account = await sut.loadByToken('any_token')
       expect(account).toBeTruthy()
@@ -103,7 +103,7 @@ describe("Account Mongo Reposiotry", () => {
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
-        acessToken: 'any_token',
+        accessToken: 'any_token',
         role: 'any_role'
       })
       const account = await sut.loadByToken('any_token', 'any_role')

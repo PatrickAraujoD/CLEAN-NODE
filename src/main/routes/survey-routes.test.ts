@@ -5,7 +5,7 @@ import { sign } from 'jsonwebtoken';
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 
-let serveyCollection: Collection
+let surveyCollection: Collection
 let accountCollection: Collection
 
 describe('Survey Routes', () => {
@@ -18,9 +18,9 @@ describe('Survey Routes', () => {
   })
 
   beforeEach(async () => {
-    serveyCollection = await MongoHelper.getCollection('surveys')
+    surveyCollection = await MongoHelper.getCollection('surveys')
     accountCollection = await MongoHelper.getCollection('accounts')
-    await serveyCollection.deleteMany({})
+    await surveyCollection.deleteMany({})
     await accountCollection.deleteMany({})
   })
 
@@ -80,6 +80,44 @@ describe('Survey Routes', () => {
       await request(app)
             .get('/api/surveys')
             .expect(403)
+    })
+
+    test('Should return 200 on load surveys with valid accessToken', async () => {
+      await surveyCollection.insertMany([{
+        question: 'any_question', 
+        answers: [{
+          answer: 'any_answer',
+          image: 'any_image'
+        }],
+        date: new Date()
+      }, {
+        question: 'other_question', 
+        answers: [{
+          answer: 'other_answer',
+          image: 'other_image'
+        }],
+        date: new Date()
+      }])
+      const res = await accountCollection.insertOne({
+        name: "patrick",
+        email: "mail@mail.com",
+        password: '123',
+      })
+      const id = res.insertedId
+      const accessToken = sign({ id }, env.jwtSecret)
+      await accountCollection.updateOne(
+        {
+          _id: id
+        }, {
+          $set: {
+            accessToken
+          }
+        }
+      )
+      await request(app)
+            .get('/api/surveys')
+            .set('x-access-token', accessToken)
+            .expect(200)
     })
   })
 })
